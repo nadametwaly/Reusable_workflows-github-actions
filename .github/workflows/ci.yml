@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Node & Install Deps
-        uses: nadametwaly/Reusable-Workflows-Custom-Actions/.github/actions/setup-node-deps/action.yml@main
+        uses: nadametwaly/Reusable-Workflows-Custom-Actions/.github/actions/setup-node-deps@main
         with:
           node_version: 18
           cache_path: |
