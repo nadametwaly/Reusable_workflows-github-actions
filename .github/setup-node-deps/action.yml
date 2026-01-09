@@ -1,0 +1,30 @@
+name: "Setup Node & Install Dependencies"
+description: "Install Node.js, cache dependencies, and run npm install"
+
+inputs:
+  node_version:
+    description: "Node.js version"
+    required: true
+  cache_path:
+    description: "Paths to cache"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node_version }}
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ inputs.cache_path }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: npm install
+      shell: bash
