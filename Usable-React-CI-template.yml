@@ -1,0 +1,84 @@
+name: React CI Template
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: 'Node.js version to use'
+        required: true
+        type: string
+      lint_phase:
+        description: 'Boolean flag to enable/disable linting'
+        required: false
+        default: true
+        type: boolean
+      unit_test:
+        description: 'Boolean flag to enable/disable unit tests'
+        required: false
+        default: true
+        type: boolean
+      docker_registry:
+        description: 'Docker registry URL'
+        required: false
+        default: 'ghcr.io'
+        type: string
+      docker_username:
+        description: 'Docker username'
+        required: false
+        default: '${{ github.actor }}'
+        type: string
+      docker_image_name:
+        description: 'Name of the Docker image'
+        required: true
+        type: string
+      docker_image_tag:
+        description: 'tag of the Docker image'
+        required: true
+        type: string
+      secrets:
+        docker_password:
+          description: 'Docker registry password'
+          required: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        if: ${{ inputs.lint_phase }}
+        run: npm run lint
+
+      - name: Unit Tests
+        if: ${{ inputs.unit_test }}
+        run: npm test
+
+      - name: Build application
+        run: npm run build
+
+      - name: Login to Docker Registry
+        run: |
+          echo "${{ secrets.docker_password }}" | docker login \
+            ${{ inputs.docker_registry }} \
+            -u ${{ inputs.docker_username }} \
+            --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          docker build -t \
+          ${{ inputs.docker_registry }}/${{ inputs.docker_username }}/${{ inputs.docker_image_name }}:${{ inputs.docker_image_tag }} .
+
+      - name: Push Docker Image
+        run: |
+          docker push \
+          ${{ inputs.docker_registry }}/${{ inputs.docker_username }}/${{ inputs.docker_image_name }}:${{ inputs.docker_image_tag }}
