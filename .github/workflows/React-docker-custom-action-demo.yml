@@ -17,4 +17,4 @@ jobs:
           message: "Hello World"
 
       - name: Print output from Docker Action
-        run: echo "Step output final_message: ${{ steps.docker_message.outputs.final_message }}"
+        run: echo "Step output final_message= ${{ steps.docker_message.outputs.final_message }}"
