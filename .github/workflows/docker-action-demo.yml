@@ -15,7 +15,7 @@ jobs:
 
       - name: Run Docker Message Action
         id: docker_message
-        uses: ./.github/actions/React-docker-custom-action
+        uses: ./.github/actions/docker-action
         with:
           message: "Hello World"
 
