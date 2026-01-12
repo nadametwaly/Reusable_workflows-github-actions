@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-MESSAGE="$1"
+message="$1"
 
-FINAL_MESSAGE="Docker says: $MESSAGE"
+final_message="Docker says: $message"
 
-echo "$FINAL_MESSAGE"
+echo "$final_message"
 
-echo "final_message=$FINAL_MESSAGE" >> $GITHUB_OUTPUT
+echo "final_message=$final_message" >> $GITHUB_OUTPUT
