@@ -5,7 +5,7 @@ inputs:
     message:
         description: A message passed from the workflow
         required: true
-        type: string
+        #type: string
 
 outputs:
   final_message:
